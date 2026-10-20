@@ -13,7 +13,7 @@ print("\n=== FONTES RECUPERADAS ===")
 for c in resultado["chunks"]:
     print(f"-> {c['fonte']} (Pág {c['pagina']}) - Similaridade: {c['similaridade']}")
 
-print("\n=== RESPOSTA FINAL DO ACOLHESUS ===")
+print("\n=== RESPOSTA FINAL DO ORIENTA-SAUDE ===")
 print(resultado["resposta"])
 
 print("\n=== CONSUMO DE TOKENS ===")

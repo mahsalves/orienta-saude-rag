@@ -8,18 +8,12 @@ from sentence_transformers import SentenceTransformer
 
 load_dotenv()
 
-# NVIDIA_KEY = os.getenv("NVIDIA_API_KEY")
-# O Hugging Face possui endpoint compatível com OpenAI
 client_llm = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     api_key=os.getenv("GROQ_API_KEY")
 )
 MODELO_LLM = "qwen/qwen3.8-27b"
 
-"""client_llm = OpenAI(
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=NVIDIA_KEY
-)"""
 
 client_chroma = chromadb.PersistentClient(path="chroma_db")
 colecao = client_chroma.get_collection(name="telecondutas_sus")
@@ -83,11 +77,11 @@ def buscar_contexto(query_text: str, n_resultados: int = 4):
     return chunks_recuperados
 
 def gerar_orientacao_clinica(relato_usuario: str, temperatura: float = 0.2):
-    print("⏳ [1/4] Traduzindo queixa para termos clínicos (LLM)...")
+    print(" [1/4] Traduzindo queixa para termos clínicos (LLM)...")
     analise_clinica = traduzir_queixa_para_termos_clinicos(relato_usuario)
     query_otimizada = analise_clinica.get("query_busca", relato_usuario)
     
-    print(f"⏳ [2/4] Buscando no ChromaDB com a query: '{query_otimizada}'...")
+    print(f" [2/4] Buscando no ChromaDB com a query: '{query_otimizada}'...")
     chunks = buscar_contexto(query_otimizada, n_resultados=4)
     
     contexto_formatado = "\n\n---\n\n".join([
@@ -95,7 +89,7 @@ def gerar_orientacao_clinica(relato_usuario: str, temperatura: float = 0.2):
         for c in chunks
     ])
 
-    system_prompt = f"""Você é o AcolheSUS, assistente de acolhimento e orientação em saúde fundamentado estritamente nas diretrizes oficiais do SUS e Telessaúde.
+    system_prompt = f"""Você é o Orienta-SAUDE, assistente de acolhimento e orientação em saúde fundamentado estritamente nas diretrizes oficiais do SUS e Telessaúde.
 
 DIRETRIZES FUNDAMENTAIS:
 1. Baseie-se ESTRITAMENTE nos trechos oficiais fornecidos no CONTEXTO.
@@ -122,7 +116,7 @@ CONTEXTO OFICIAL DISPONÍVEL:
         max_tokens=900
     )
 
-    print("✅ [4/4] Concluído com sucesso!\n")
+    print(" [4/4] Concluído com sucesso!\n")
     texto_final = resposta_llm.choices[0].message.content
     tokens_resposta = contar_tokens(texto_final)
 

@@ -30,13 +30,13 @@ def testar_leitura():
             print(f" -> Caracteres extraídos (amostra de até 3 páginas): {len(texto_amostra)}")
             
             if len(texto_amostra.strip()) < 50:
-                print(" ⚠️ ALERTA: Pouco ou nenhum texto extraído. O PDF pode ser imagem escaneada.")
+                print(" --- ALERTA: Pouco ou nenhum texto extraído. O PDF pode ser imagem escaneada. ---")
             else:
-                print(" ✅ Sucesso: Texto legível extraído.")
+                print(" --- Sucesso: Texto legível extraído.---")
                 print(f" Trecho inicial: {texto_amostra[:200]}...\n")
                 
         except Exception as e:
-            print(f" ❌ Erro ao ler {nome_arquivo}: {e}\n")
+            print(f" --- Erro ao ler {nome_arquivo}: {e} ---\n")
 
 if __name__ == "__main__":
     testar_leitura()

@@ -62,7 +62,7 @@ def extrair_e_fatiar():
 
             print(f"✔️ {nome_arquivo}: {chunks_doc} chunks.")
         except Exception as e:
-            print(f"❌ Erro ao processar {nome_arquivo}: {e}")
+            print(f" --- Erro ao processar {nome_arquivo}: {e} ---")
 
     return todos_chunks, todos_metadados
 
@@ -106,7 +106,7 @@ def criar_banco_vetorial():
         )
         print(f" -> Processados {min(i + tamanho_lote, total)} de {total} chunks...")
 
-    print("\n✅ Base vetorial multilíngue reconstruída com sucesso!")
+    print("\n --- Base vetorial multilíngue reconstruída com sucesso! ---")
 
 if __name__ == "__main__":
     criar_banco_vetorial()
