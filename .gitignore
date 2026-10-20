@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Dados e banco vetorial
+data/raw/*.pdf
+data/processed/
+chroma_db/
