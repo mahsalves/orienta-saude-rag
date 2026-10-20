@@ -47,3 +47,23 @@ Os termos normalizados são convertidos em vetores densos via modelo de embeddin
 
 - Raciocínio Clínico e Geração com Citação Oficial:
 O LLM recebe os trechos oficiais recuperados injetados em seu contexto, junto a um system prompt estrito que implementa raciocínio passo a passo (Chain-of-Thought). O modelo confronta os sintomas do usuário com os critérios de gravidade e encaminhamento dos manuais, gerando a resposta final em linguagem clara e acessível ao cidadão. A saída categoriza a porta de entrada recomendada (Atenção Básica, Especialista ou Emergência), transcreve o trecho de referência do protocolo e exibe as métricas de tokens e similaridade calculadas.
+
+## Como executar
+
+Siga o passo a passo abaixo para configurar o ambiente e rodar o pipeline na sua máquina.
+
+---
+
+### 1. Pré-requisitos
+
+* **Python 3.10+** instalado
+* Chave de API gratuita da **Groq Cloud** ([obter chave aqui](https://console.groq.com/keys))
+* Git instalado
+
+---
+
+### 2. Clonar o Repositório e Acessar o Diretório
+
+```bash
+git clone <https://github.com/mahsalves/orienta-saude-rag>
+cd orienta-saude-rag
