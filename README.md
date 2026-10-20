@@ -10,7 +10,7 @@ Projeto prático desenvolvido para a 1ª Unidade da disciplina de **Tópicos Esp
 - Marcela Helena
 - Jennifer de Oliveira
 
-## Sobre o Problema
+## Sobre o problema
 
 A desinformação sobre sintomas e saúde na internet frequentemente leva a dois extremos: automedicação perigosa ou sobrecarga desnecessária de unidades de urgência e emergência (UPAs e hospitais) com demandas que poderiam ser resolvidas na Atenção Primária (UBS). Por outro lado, o uso ingênuo de Modelos de Linguagem de Grande Porte (LLMs) em saúde sem restrições gera alucinações críticas.
 
@@ -18,11 +18,11 @@ O **OrientaSaúde RAG** resolve esse desafio funcionando como uma camada de acol
 
 ---
 
-## Conteúdos da Unidade Aplicados
+## Conteúdos da unidade aplicados
 
 O projeto implementa e evidencia os cinco pilares fundamentais da unidade de TEIA:
 
-| Conceito | Implementação Prática no Projeto |
+| Conceito | Implementação prática no projeto |
 | :--- | :--- |
 | **Tokenização** | Monitoramento e exibição em tempo real do consumo de tokens (prompt de entrada, contexto recuperado dos manuais e resposta gerada), demonstrando a gestão dos limites da janela de contexto (*context window*). |
 | **Embeddings** | Fatiamento (*chunking*) dos documentos oficiais e conversão para representações vetoriais densas com o modelo `all-MiniLM-L6-v2` (ou `BAAI/bge-m3`), permitindo busca semântica por proximidade angular e similaridade de cosseno. |
@@ -32,7 +32,7 @@ O projeto implementa e evidencia os cinco pilares fundamentais da unidade de TEI
 
 ---
 
-## Arquitetura do Sistema
+## Arquitetura do sistema
 
 O fluxo de processamento do AcolheSUS RAG é estruturado em quatro etapas sequenciais, garantindo que nenhuma resposta seja gerada sem validação prévia contra as diretrizes oficiais:
 
@@ -62,8 +62,33 @@ Siga o passo a passo abaixo para configurar o ambiente e rodar o pipeline na sua
 
 ---
 
-### 2. Clonar o Repositório e Acessar o Diretório
+### 2. Clonar o repositório e acessar o diretório
 
 ```bash
 git clone <https://github.com/mahsalves/orienta-saude-rag>
 cd orienta-saude-rag
+```
+### 3. Ambiente virtual e dependências
+
+Crie e ative o ambiente virtual:
+
+* **Windows (PowerShell):**
+  ```powershell
+  python -m venv venv
+  .\venv\Scripts\Activate.ps1
+
+* Instale os pacotes necessários:
+  ```bash
+  pip install -r requirements.txt
+
+### 4. Configurar variáveis de ambiente
+
+Crie um arquivo .env na raiz do projeto com sua chave da Groq:
+```bash
+GROQ_API_KEY=gsk_sua_chave_groq_aqui
+```
+
+### 5. Executar o teste do pipeline (terminal)
+Com o banco vetorial gerado, execute a validação ponta a ponta (Query Expansion + ChromaDB + Groq LLM):
+```bash
+python src/test_end_to_end.py
