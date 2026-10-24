@@ -76,13 +76,13 @@ def buscar_contexto(query_text: str, n_resultados: int = 4):
         })
     return chunks_recuperados
 
-def gerar_orientacao_clinica(relato_usuario: str, temperatura: float = 0.2):
+def gerar_orientacao_clinica(relato_usuario: str, temperatura: float = 0.2, k: int = 4):
     print(" [1/4] Traduzindo queixa para termos clínicos (LLM)...")
     analise_clinica = traduzir_queixa_para_termos_clinicos(relato_usuario)
     query_otimizada = analise_clinica.get("query_busca", relato_usuario)
     
     print(f" [2/4] Buscando no ChromaDB com a query: '{query_otimizada}'...")
-    chunks = buscar_contexto(query_otimizada, n_resultados=4)
+    chunks = buscar_contexto(query_otimizada, n_resultados=k)
     
     contexto_formatado = "\n\n---\n\n".join([
         f"[DOCUMENTO: {c['fonte']} | PÁGINA: {c['pagina']} | SIMILARIDADE: {c['similaridade']}]\n{c['texto']}"
