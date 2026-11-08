@@ -223,5 +223,4 @@ __marimo__/
 data/raw/*.pdf
 data/processed/
 chroma_db/
-data/history.sqlite3
 *.pyc
