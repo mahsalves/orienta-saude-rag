@@ -1,4 +1,5 @@
 import time
+import sqlite3
 from pathlib import Path
 import sys
 
@@ -10,6 +11,40 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from rag_engine import gerar_orientacao_clinica
+
+
+HISTORY_DB = ROOT_DIR / "data" / "history.sqlite3"
+
+
+def inicializar_historico():
+    HISTORY_DB.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(HISTORY_DB) as conexao:
+        conexao.execute(
+            """CREATE TABLE IF NOT EXISTS conversas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pergunta TEXT NOT NULL,
+                resposta TEXT NOT NULL,
+                criada_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )"""
+        )
+
+
+def listar_historico():
+    with sqlite3.connect(HISTORY_DB) as conexao:
+        return conexao.execute(
+            "SELECT id, pergunta, resposta, criada_em FROM conversas ORDER BY id DESC"
+        ).fetchall()
+
+
+def salvar_conversa(pergunta, resposta):
+    with sqlite3.connect(HISTORY_DB) as conexao:
+        conexao.execute(
+            "INSERT INTO conversas (pergunta, resposta) VALUES (?, ?)",
+            (pergunta, resposta),
+        )
+
+
+inicializar_historico()
 
 
 st.set_page_config(
@@ -29,6 +64,23 @@ st.warning(
 )
 
 with st.sidebar:
+    st.header("Histórico de perguntas")
+    historico = listar_historico()
+    if historico:
+        opcoes_historico = {
+            f"#{id_conversa} · {pergunta[:70]}{'…' if len(pergunta) > 70 else ''} · {criada_em}": (pergunta, resposta)
+            for id_conversa, pergunta, resposta, criada_em in historico
+        }
+        selecionada = st.selectbox("Perguntas anteriores", ["Selecione uma pergunta"] + list(opcoes_historico))
+        if selecionada != "Selecione uma pergunta":
+            pergunta_antiga, resposta_antiga = opcoes_historico[selecionada]
+            st.markdown("**Pergunta**")
+            st.write(pergunta_antiga)
+            st.markdown("**Resposta**")
+            st.write(resposta_antiga)
+    else:
+        st.caption("As perguntas respondidas aparecerão aqui.")
+
     st.header("Configurações")
     temperatura = st.slider(
         "Temperatura da LLM",
@@ -201,6 +253,7 @@ if pergunta:
                 st.session_state.messages.append(
                     {"role": "assistant", "content": resposta, "resultado": resultado}
                 )
+                salvar_conversa(pergunta, resposta)
                 st.rerun()
             except Exception as erro:
                 mensagem_erro = (
